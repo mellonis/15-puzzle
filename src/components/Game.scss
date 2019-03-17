@@ -1,0 +1,15 @@
+:root {
+    --overflow: 4px;
+    --board-size: 360px;
+    --board-radius: calc(var(--board-size) / 100);
+    --tile-gap-coefficient: 0.03;
+    --tile-gap: calc(var(--board-size) * var(--tile-gap-coefficient));
+    --tile-border-radius: calc(var(--board-size) / 70);
+    --tile-border-color: #666;
+    --tile-number-color: #ccc;
+}
+
+.Game {
+    margin: 1rem auto;
+    position: relative;
+}
