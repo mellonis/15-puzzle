@@ -1,0 +1,81 @@
+[
+  {
+    "title": "8½",
+    "director": "Federico Fellini"
+  },
+  {
+    "title": "Le premier jour du reste de ta vie",
+    "title_ru": "Первый день оставшейся жизни",
+    "director": "Rémi Bezançon"
+  },
+  {
+    "title": "Séraphine",
+    "title_ru": "Серафина из Санлиса",
+    "director": "Martin Provost"
+  },
+  {
+    "title": "Rushmore",
+    "title_ru": "Академия Рашмор",
+    "director": "Wes Anderson"
+  },
+  {
+    "title": "Copie conforme",
+    "title_ru": "Копия верна",
+    "director": "Abbas Kiarostami"
+  },
+  {
+    "title": "Tournée",
+    "title_ru": "Турне",
+    "director": "Mathieu Amalric"
+  },
+  {
+    "title": "Окно в Париж",
+    "director": "Юрий Мамин"
+  },
+  {
+    "title": "Restless",
+    "title_ru": "Не сдавайся",
+    "director": "Gus Van Sant"
+  },
+  {
+    "title": "Paris vu par...",
+    "title_ru": "Париж глазами шести",
+    "director": [
+      "Claude Chabrol",
+      "Jean Douchet",
+      "Jean-Luc Godard",
+      "Jean-Daniel Pollet",
+      "Eric Rohmer",
+      "Jean Rouch"
+    ]
+  },
+  {
+    "title": "Du levande",
+    "title_ru": "Ты, живущий",
+    "director": "Roy Andersson"
+  },
+  {
+    "title": "Les quatre cents coups",
+    "title_ru": "Четыреста ударов",
+    "director": "François Truffaut"
+  },
+  {
+    "title": "Melancholia",
+    "title_ru": "Меланхолия",
+    "director": "Lars von Trier"
+  },
+  {
+    "title": "La flor de mi secreto",
+    "title_ru": "Цветок моей тайны",
+    "director": "Pedro Almodóvar"
+  },
+  {
+    "title": "Увлеченья",
+    "director": "Кира Муратова"
+  },
+  {
+    "title": "Dolls",
+    "title_ru": "Куклы",
+    "director": "北野 武 (Takeshi Kitano)"
+  }
+]

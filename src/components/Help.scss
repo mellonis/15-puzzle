@@ -1,0 +1,14 @@
+.Help {
+  background-color: rgba(0, 0, 0, 0.9);
+  border: {
+    radius: var(--board-radius);
+  }
+  bottom: calc(-1 * var(--overflow));
+  color: #cccccc;
+  left: 50%;
+  padding: var(--tile-gap);
+  position: absolute;
+  top: calc(-1 * var(--overflow));
+  transform: translate(-50%);
+  width: calc(var(--board-size) + 2 * var(--overflow));
+}
