@@ -1,189 +1,218 @@
 export default class Patn {
-    boardSize = {
-        cols: 4,
-        rows: 4,
-    };
-    tileList = [];
-    moveList = [];
-    isSolved = false;
-    level = 1;
-    levelCount;
-    isLastLevel;
-    rightMoves;
+  static #size = {
+    height: 4,
+    width: 4,
+  };
+  #tileList = [];
+  #movementList = [];
+  #level = 1;
+  #levelCount;
+  #possibleMoves;
 
-    constructor(levelCount, lastSolvedLevel=0) {
-        this.levelCount = levelCount;
-        this.level = lastSolvedLevel + 1;
+  constructor(levelCount, lastSolvedLevel = 0) {
+    this.#levelCount = levelCount;
+    this.#level = lastSolvedLevel + 1;
 
-        if (this.level > this.levelCount) {
-            this.level = this.levelCount;
-        }
-
-        this.generateRightMoves();
-        this.generate();
+    if (this.#level > this.#levelCount) {
+      this.#level = this.#levelCount;
     }
 
-    generate(isFirstRun=true) {
-        if (isFirstRun && this.isSolved && this.level < this.levelCount) {
-            this.level += 1;
-        }
+    this.generateRightMoves();
+    this.generate();
+  }
 
-        this.moveList = [];
-        this.tileList = Array.apply(null, {length: this.boardSize.cols * this.boardSize.rows})
-            .map(Number.call, (i) => i + 1)
-            .sort(() => Math.random() - 0.5);
+  get canBeSolved() {
+    const tile = this.#tileList.map(i => i - 1);
 
-        while (!this.canBeSolved() || this.checkIfSolved()) {
-            this.generate(false);
-        }
-        this.isLastLevel = this.level === this.levelCount;
+    let e = -1;
+    let k = 0;
+
+    for (let i = 0; i < 16; ++i) {
+      if (tile[i] === 15) {
+        e = Math.floor((i + 1) / 4);
+        if ((i + 1) % 4 > 0)
+          ++e;
+        break;
+      }
     }
 
-    generateRightMoves() {
-        this.rightMoves = [];
-
-        for (let i = 0, r = 0, c = 0; i < this.boardSize.cols * this.boardSize.rows; ++i) {
-            this.rightMoves[i] = [];
-            c = i % this.boardSize.cols;
-            r = (i - c) / this.boardSize.cols;
-            if (r > 0) {
-                this.rightMoves[i].push((r - 1) * this.boardSize.cols + c);
-            }
-            if (c < this.boardSize.cols - 1) {
-                this.rightMoves[i].push(r * this.boardSize.cols + c + 1);
-            }
-            if (r < this.boardSize.rows - 1) {
-                this.rightMoves[i].push((r + 1) * this.boardSize.cols + c);
-            }
-            if (c > 0) {
-                this.rightMoves[i].push(r * this.boardSize.cols + c - 1);
-            }
+    for (let i = 0; i < 16; ++i) {
+      for (let j = 0; j < i; ++j) {
+        if ((tile[j] > tile[i]) && (tile[j] < 15)) {
+          ++k;
         }
+      }
     }
 
-    getEmptyIx() {
-        return this.tileList.findIndex((order) => order === 16);
+    return (k + e) % 2 === 0;
+  }
+
+  get canUndo() {
+    return this.movesCount > 0;
+  }
+
+  get emptyIx() {
+    return this.#tileList.findIndex((order) => order === 16);
+  }
+
+  get isLastLevel() {
+    return this.#level === this.#levelCount;
+  }
+
+  get isSolved() {
+    let isSolved = true;
+
+    for (let i = 1; i < this.#tileList.length; ++i) {
+      if (this.#tileList[i] - this.#tileList[i - 1] !== 1) {
+        isSolved = false;
+        break;
+      }
     }
 
-    canBeSolved() {
-        const qq = this.tileList.map(i => i - 1);
+    return isSolved;
+  }
 
-        let e = -1;
-        let k = 0;
+  get level() {
+    return this.#level;
+  }
 
-        for (let i = 0; i < 16; ++i) {
-            if (qq[i] === 15) {
-                e = Math.floor((i + 1) / 4);
-                if ((i + 1) % 4 > 0)
-                    ++e;
-                break;
-            }
-        }
+  get movesCount() {
+    return this.#movementList.length;
+  }
 
-        for (let i = 0; i < 16; ++i) {
-            for (let j = 0; j < i; ++j) {
-                if ((qq[j] > qq[i]) && (qq[j] < 15)) {
-                    ++k;
-                }
-            }
-        }
+  get tileList() {
+    return Array.from(this.#tileList);
+  }
 
-        return (k + e) % 2 === 0;
+  checkIfItPossibleMove(ix) {
+    return this.#possibleMoves[ix].findIndex(order => order === this.emptyIx) >= 0;
+  };
+
+  generate(isFirstRun = true) {
+    if (isFirstRun && this.isSolved && this.#level < this.#levelCount) {
+      this.#level += 1;
     }
 
-    checkIfRightMove(ix) {
-        const emptyIx = this.getEmptyIx();
+    this.#movementList = [];
+    this.#tileList = Array.apply(null, {length: Patn.#size.width * Patn.#size.height})
+      .map(Number.call, (i) => i + 1)
+      .sort(() => Math.random() - 0.5);
 
-        return this.rightMoves[ix].findIndex(order => order === emptyIx) >= 0;
-    };
+    while (!this.canBeSolved || this.isSolved) {
+      this.generate(false);
+    }
+  }
 
-    checkIfSolved() {
-        let isSolved = true;
+  generateRightMoves() {
+    this.#possibleMoves = [];
 
-        for (let i = 1; i < this.tileList.length; ++i) {
-            if (this.tileList[i] - this.tileList[i - 1] !== 1) {
-                isSolved = false;
-                break;
-            }
-        }
+    for (let i = 0, r = 0, c = 0; i < Patn.#size.width * Patn.#size.height; ++i) {
+      this.#possibleMoves[i] = [];
+      c = i % Patn.#size.width;
+      r = (i - c) / Patn.#size.width;
 
-        this.isSolved = isSolved;
+      if (r > 0) {
+        this.#possibleMoves[i].push((r - 1) * Patn.#size.width + c);
+      }
 
-        return isSolved;
+      if (c < Patn.#size.width - 1) {
+        this.#possibleMoves[i].push(r * Patn.#size.width + c + 1);
+      }
+
+      if (r < Patn.#size.height - 1) {
+        this.#possibleMoves[i].push((r + 1) * Patn.#size.width + c);
+      }
+
+      if (c > 0) {
+        this.#possibleMoves[i].push(r * Patn.#size.width + c - 1);
+      }
+    }
+  }
+
+  move(ix) {
+    const emptyIx = this.emptyIx;
+
+    if (Array.isArray(ix)) {
+      ix.forEach(this.move.bind(this));
+      return;
     }
 
-    move(ix) {
-        const emptyIx = this.getEmptyIx();
-
-        if (Array.isArray(ix)) {
-            ix.forEach(this.move.bind(this));
-        } else if (this.checkIfRightMove(ix)) {
-            this.elementaryMove(ix);
-        } else if (ix % this.boardSize.cols === emptyIx % this.boardSize.cols) {
-            const movementList = [];
-            let t;
-
-            if (ix > emptyIx) {
-                t = emptyIx + this.boardSize.cols;
-
-                while (t <= ix) {
-                    movementList.push(t);
-                    t += this.boardSize.cols;
-                }
-            } else {
-                t = emptyIx - this.boardSize.cols;
-
-                while (t >= ix) {
-                    movementList.push(t);
-                    t -= this.boardSize.cols;
-                }
-            }
-
-            this.move(movementList);
-        } else if ((ix - ix % this.boardSize.cols) / this.boardSize.cols === (emptyIx - emptyIx % this.boardSize.cols) / this.boardSize.cols) {
-            const moveList = [];
-            let t;
-
-            if (ix > emptyIx) {
-                t = emptyIx + 1;
-
-                while (t <= ix) {
-                    moveList.push(t);
-                    t++;
-                }
-            } else {
-                t = emptyIx - 1;
-
-                while (t >= ix) {
-                    moveList.push(t);
-                    t--;
-                }
-            }
-
-            this.move(moveList);
-        }
-
-        this.checkIfSolved();
+    if (this.checkIfItPossibleMove(ix)) {
+      this.simpleMove(ix);
+      return;
     }
 
-    undo() {
-        if (this.moveList.length) {
-            const ix = this.moveList.pop();
+    const isEmptyInTheSameColumn = ix % Patn.#size.width === emptyIx % Patn.#size.width;
 
-            this.elementaryMove(ix, true);
-            this.moveList = Array.from(this.moveList);
+    if (isEmptyInTheSameColumn) {
+      const movementList = [];
+      let t;
+
+      if (ix > emptyIx) {
+        t = emptyIx + Patn.#size.width;
+
+        while (t <= ix) {
+          movementList.push(t);
+          t += Patn.#size.width;
         }
+      } else {
+        t = emptyIx - Patn.#size.width;
+
+        while (t >= ix) {
+          movementList.push(t);
+          t -= Patn.#size.width;
+        }
+      }
+
+      this.move(movementList);
+      return;
     }
 
-    elementaryMove(ix, isUndo=false) {
-        let emptyIx = this.getEmptyIx();
-        this.tileList[emptyIx] = this.tileList[ix];
-        this.tileList[ix] = 16;
+    const isEmptyInTheSameRow = (ix - ix % Patn.#size.width) / Patn.#size.width === (emptyIx - emptyIx % Patn.#size.width) / Patn.#size.width;
 
-        this.tileList = Array.from(this.tileList);
+    if (isEmptyInTheSameRow) {
+      const movementList = [];
+      let t;
 
-        if (isUndo === false) {
-            this.moveList = this.moveList.concat(emptyIx);
+      if (ix > emptyIx) {
+        t = emptyIx + 1;
+
+        while (t <= ix) {
+          movementList.push(t);
+          t++;
         }
+      } else {
+        t = emptyIx - 1;
+
+        while (t >= ix) {
+          movementList.push(t);
+          t--;
+        }
+      }
+
+      this.move(movementList);
     }
+  }
+
+  simpleMove(ix, isUndo = false) {
+    const emptyIx = this.emptyIx;
+
+    this.#tileList[emptyIx] = this.#tileList[ix];
+    this.#tileList[ix] = 16;
+
+    this.#tileList = Array.from(this.#tileList);
+
+    if (isUndo === false) {
+      this.#movementList = this.#movementList.concat(emptyIx);
+    }
+  }
+
+  undo() {
+    if (this.canUndo) {
+      const ix = this.#movementList.pop();
+
+      this.simpleMove(ix, true);
+      this.#movementList = Array.from(this.#movementList);
+    }
+  }
 }

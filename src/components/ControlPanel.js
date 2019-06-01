@@ -8,9 +8,17 @@ class ControlPanel extends Component {
         return (
             <div className="ControlPanel">
                 <div>Level: {this.props.level}</div>
-                <div>Steps: {this.props.moveList.length}</div>
+                <div>
+                    {
+                        this.props.movesCount
+                            ?
+                            <>Steps: {this.props.movesCount}</>
+                            :
+                            ''
+                    }
+                </div>
                 {
-                    !this.props.isSolved && this.props.moveList.length
+                    !this.props.isSolved && this.props.canUndo
                         ?
                         <div onClick={this.undo}>←</div>
                         :
@@ -43,7 +51,8 @@ class ControlPanel extends Component {
 const mapStateToProps = (state) => {
     return {
         level: state.game.puzzle.level,
-        moveList: state.game.puzzle.moveList,
+        canUndo: state.game.puzzle.canUndo,
+        movesCount: state.game.puzzle.movesCount,
         isSolved: state.game.puzzle.isSolved,
     };
 };
