@@ -5,13 +5,18 @@ export default class Patn {
   };
   #tileList = [];
   #movementList = [];
-  #level = 1;
+  #level;
   #levelCount;
   #possibleMoves;
 
   constructor(levelCount, lastSolvedLevel = 0) {
     this.#levelCount = levelCount;
-    this.#level = lastSolvedLevel + 1;
+
+    if (lastSolvedLevel < 0) {
+      lastSolvedLevel = 0;
+    }
+
+    this.#level = lastSolvedLevel;
 
     if (this.#level > this.#levelCount) {
       this.#level = this.#levelCount;
