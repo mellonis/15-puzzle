@@ -7,7 +7,9 @@ class About extends Component {
     render() {
         return (
             <div className="About" onClick={this.hide}>
-                This is an about window!
+                <div className="container">
+                    Yet another 15 puzzle
+                </div>
             </div>
         );
     }
