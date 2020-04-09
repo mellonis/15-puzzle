@@ -1,1 +1,1 @@
-Игра "Пятнашки", реализованная на React.js
+Yet another 15 puzzle
