@@ -23,7 +23,11 @@ class Board extends Component {
                                             <div key={order + 1} className="info">
                                                 <div className="title">{this.props.levelList[this.props.level - 1].title}</div>
                                                 <div className="director">{this.props.levelList[this.props.level - 1].director}</div>
-                                                { <div className="title_ru">{this.props.levelList[this.props.level - 1].title_ru}</div> || '' }
+                                                {
+                                                    this.props.levelList[this.props.level - 1].title_ru
+                                                      ? <div className="title_ru">{this.props.levelList[this.props.level - 1].title_ru}</div>
+                                                      : ''
+                                                }
                                             </div>
                                         </Fragment>
                                         :
