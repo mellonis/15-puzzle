@@ -1,10 +1,8 @@
-.Board {
-  background: {
-    image: url('/img/xv.png');
-  }
-  border: {
-    radius: var(--board-radius);
-  }
+.board {
+  $selector: &;
+
+  background-image: url('/img/xv.png');
+  border-radius: var(--board-radius);
   box-shadow: #333 2px 2px 5px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -15,38 +13,32 @@
   position: relative;
   width: var(--board-size);
 
-  &:not(.done) {
-    grid-gap: var(--tile-gap);
+  &:not(#{$selector}_done) {
+    grid-gap: var(--tile-gap);    
 
-    .tile {
-      border: {
-        radius: var(--tile-border-radius);
-        style: solid;
-      }
+    #{$selector}__tile {
+      border-radius: var(--tile-border-radius);
+      border-style: solid;
       box-shadow: #000 2px 2px 2px;
       cursor: pointer;
-
+  
       &:hover {
         box-shadow: #000 8px 8px 10px;
         left: -4px;
         top: -4px;
       }
-
+  
       @for $i from 0 through 14 {
-        &.tile#{$i + 1} {
-          &:after {
-            content: "#{$i + 1}";
-          }
+        &_#{$i + 1}:after {
+          content: "#{$i + 1}";
         }
       }
     }
   }
 
-  .tile {
-    border: {
-      color: var(--tile-border-color);
-      width: 1px;
-    }
+  &__tile {
+    border-color: var(--tile-border-color);
+    border-width: 1px;
     overflow: hidden;
     position: relative;
 
@@ -58,9 +50,6 @@
     }
     &:after {
       color: var(--tile-number-color);
-      font: {
-        size: 1.2rem;
-      }
       left: calc(var(--board-size) / 50);
       position: absolute;
       text-shadow: black 2px 2px 2px;
@@ -68,7 +57,7 @@
     }
 
     @for $i from 0 through 15 {
-      &.tile#{$i + 1} {
+      &_#{$i + 1} {
         &:before {
           left: ($i % 4 * 100% * -1);
           top: (floor($i / 4) * 100% * -1);
@@ -105,52 +94,44 @@
       }
     }
 
-    &.tile1 {
+    &_1 {
       border-top-left-radius: var(--tile-border-radius);
     }
-    &.tile4 {
+    &_4 {
       border-top-right-radius: var(--tile-border-radius);
     }
-    &.tile13 {
+    &_13 {
       border-bottom-left-radius: var(--tile-border-radius);
     }
-    &.tile16 {
+    &_16 {
       border-bottom-right-radius: var(--tile-border-radius);
     }
   }
 
   @for $i from 0 through 15 {
     &[data-level="#{$i}"] {
-      .tile:before {
-        background: {
-          @if ($i < 10) {
-            image: url('/img/puzzles/00#{$i}.png');
-          }
-          @else if($i < 100) {
-            image: url('/img/puzzles/0#{$i}.png');
-          }
-          @else if($i < 1000) {
-            image: url('/img/puzzles/#{$i}.png');
-          }
+      #{$selector}__tile:before {
+        @if ($i < 10) {
+          background-image: url('/img/puzzles/00#{$i}.png');
+        }
+        @else if($i < 100) {
+          background-image: url('/img/puzzles/0#{$i}.png');
+        }
+        @else if($i < 1000) {
+          background-image: url('/img/puzzles/#{$i}.png');
         }
       }
     }
   }
 
-  .info {
-    background: {
-      color: rgba(0, 0, 0, 0.9);
-    }
-    border: {
-      bottom: {
-        left-radius: var(--tile-border-radius);
-        right-radius: var(--tile-border-radius);
-      };
-      color: var(--tile-border-color);
-      style: solid;
-      top: 0;
-      width: 1px;
-    }
+  &__info {
+    background-color: rgba(0, 0, 0, 0.9);
+    border-bottom-left-radius: var(--tile-border-radius);
+    border-bottom-right-radius: var(--tile-border-radius);
+    border-color: var(--tile-border-color);
+    border-style: solid;
+    border-top: 0;
+    border-width: 1px;
     bottom: var(--tile-gap);
     color: var(--tile-number-color);
     left: var(--tile-gap);

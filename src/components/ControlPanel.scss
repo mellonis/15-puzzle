@@ -1,11 +1,7 @@
-.ControlPanel {
+.control-panel {
   align-items: center;
-  background: {
-    image: url('/img/xv.png');
-  }
-  border: {
-    radius: var(--board-radius);
-  }
+  background-image: url('/img/xv.png');
+  border-radius: var(--board-radius);
   box-shadow: #333 2px 2px 5px;
   display: grid;
   grid-template-columns: 1fr 1fr repeat(4, min-content);
@@ -14,13 +10,21 @@
   user-select: none;
   width: var(--board-size);
 
-  & > div:not(:nth-child(1)):not(:nth-child(2)) {
-    cursor: pointer;
+  &__undo, &__restart, &__help, &__about {    
+    cursor: pointer;    
     min-width: 1.5rem;
     text-align: center;
 
     &:hover {
       text-shadow: black 1px 1px 2px;
     }
+
+    &:active {
+      transform: translate(2px, 2px);
+    }
+  }
+
+  &__undo {
+    font-family: sans-serif;
   }
 }
