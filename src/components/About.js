@@ -6,7 +6,7 @@ import { hideAbout } from "../actions/gameActions";
 class About extends Component {
     render() {
         return (
-            <div className="About" onClick={this.hide}>
+            <div className="about" onClick={this.hide}>
                 <div className="container">
                     Yet another 15 puzzle
                 </div>
