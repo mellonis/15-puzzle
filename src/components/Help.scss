@@ -1,8 +1,6 @@
-.Help {
+.help {
   background-color: rgba(0, 0, 0, 0.9);
-  border: {
-    radius: var(--board-radius);
-  }
+  border-radius: var(--board-radius);
   bottom: calc(-1 * var(--overflow));
   color: #cccccc;
   cursor: pointer;
@@ -15,7 +13,37 @@
   width: calc(var(--board-size) + 2 * var(--overflow));
 }
 
-.Help > .container {
+.rules {
+  list-style: none;
+
+  &__rule {
+    position: relative;
+    &:not(:last-child) {
+      margin-bottom: 8px;
+    }
+
+    &:before {
+      display: block;
+      position: absolute;
+      left: -22px;
+    }
+
+    &_aim:before {
+      content: '🎯';
+    }
+    &_move:before {
+      content: '👆';
+    }
+    &_undo:before {
+      content: '⏮';
+    }
+    &_shuffle:before {
+      content: '🔀';
+    }
+  }
+}
+
+.help > .container {
   margin: auto;
   line-height: 1.5;
 }

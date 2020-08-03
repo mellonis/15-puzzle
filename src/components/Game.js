@@ -9,7 +9,7 @@ import './Game.scss';
 class Game extends Component {
     render() {
         return (
-            <div className="Game">
+            <div className="game">
                 <Board/>
                 <ControlPanel/>
                 {
