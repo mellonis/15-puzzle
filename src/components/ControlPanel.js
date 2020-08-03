@@ -6,9 +6,9 @@ import { restart, showAbout, showHelp, undo } from '../actions/gameActions'
 class ControlPanel extends Component {
     render() {
         return (
-            <div className="ControlPanel">
-                <div>Level: {this.props.level}</div>
-                <div>
+            <div className="control-panel">
+                <div className="control-panel__level">Level: {this.props.level}</div>
+                <div className="control-panel__moves-count">
                     {
                         this.props.movesCount
                             ?
@@ -20,13 +20,13 @@ class ControlPanel extends Component {
                 {
                     !this.props.isSolved && this.props.canUndo
                         ?
-                        <div onClick={this.undo}>←</div>
+                        <div className="control-panel__undo" onClick={this.undo}>←</div>
                         :
                         ''
                 }
-                <div onClick={this.restart}>⟳</div>
-                <div onClick={this.showHelp}>?</div>
-                <div onClick={this.showAbout}>i</div>
+                <div className="control-panel__restart" onClick={this.restart}>⟳</div>
+                <div className="control-panel__help" onClick={this.showHelp}>?</div>
+                <div className="control-panel__about" onClick={this.showAbout}>i</div>
             </div>
         );
     }

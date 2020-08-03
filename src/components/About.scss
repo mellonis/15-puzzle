@@ -1,8 +1,6 @@
-.About {
+.about {
   background-color: rgba(0, 0, 0, 0.9);
-  border: {
-    radius: var(--board-radius);
-  }
+  border-radius: var(--board-radius);
   bottom: calc(-1 * var(--overflow));
   color: #cccccc;
   cursor: pointer;
@@ -15,7 +13,7 @@
   width: calc(var(--board-size) + 2 * var(--overflow));
 }
 
-.About > .container {
+.about > .container {
   margin: auto;
   text-align: center;
   line-height: 1.5;
