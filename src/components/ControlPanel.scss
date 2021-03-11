@@ -1,6 +1,6 @@
 .control-panel {
   align-items: center;
-  background-image: url('/img/xv.png');
+  background-image: url('/assests/img/xv.png');
   border-radius: var(--board-radius);
   box-shadow: #333 2px 2px 5px;
   display: grid;
@@ -10,8 +10,8 @@
   user-select: none;
   width: var(--board-size);
 
-  &__undo, &__restart, &__help, &__about {    
-    cursor: pointer;    
+  &__undo, &__restart, &__help, &__about {
+    cursor: pointer;
     min-width: 1.5rem;
     text-align: center;
 

@@ -1,7 +1,7 @@
 .board {
   $selector: &;
 
-  background-image: url('/img/xv.png');
+  background-image: url('/assests/img/xv.png');
   border-radius: var(--board-radius);
   box-shadow: #333 2px 2px 5px;
   display: grid;
@@ -14,20 +14,20 @@
   width: var(--board-size);
 
   &:not(#{$selector}_done) {
-    grid-gap: var(--tile-gap);    
+    grid-gap: var(--tile-gap);
 
     #{$selector}__tile {
       border-radius: var(--tile-border-radius);
       border-style: solid;
       box-shadow: #000 2px 2px 2px;
       cursor: pointer;
-  
+
       &:hover {
         box-shadow: #000 8px 8px 10px;
         left: -4px;
         top: -4px;
       }
-  
+
       @for $i from 0 through 14 {
         &_#{$i + 1}:after {
           content: "#{$i + 1}";
@@ -108,17 +108,17 @@
     }
   }
 
-  @for $i from 0 through 15 {
+  @for $i from 1 through 15 {
     &[data-level="#{$i}"] {
       #{$selector}__tile:before {
         @if ($i < 10) {
-          background-image: url('/img/puzzles/00#{$i}.png');
+          background-image: url('/assests/img/puzzles/00#{$i}.png');
         }
         @else if($i < 100) {
-          background-image: url('/img/puzzles/0#{$i}.png');
+          background-image: url('/assests/img/puzzles/0#{$i}.png');
         }
         @else if($i < 1000) {
-          background-image: url('/img/puzzles/#{$i}.png');
+          background-image: url('/assests/img/puzzles/#{$i}.png');
         }
       }
     }
@@ -130,7 +130,6 @@
     border-bottom-right-radius: var(--tile-border-radius);
     border-color: var(--tile-border-color);
     border-style: solid;
-    border-top: 0;
     border-width: 1px;
     bottom: var(--tile-gap);
     color: var(--tile-number-color);
