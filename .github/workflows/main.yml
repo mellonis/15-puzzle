@@ -19,7 +19,7 @@ jobs:
       - name: Build
         run: |
           npm ci
-          PUBLIC_URL=/react-burger/ npm run build
+          PUBLIC_URL=/15-puzzle/ npm run build
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
