@@ -30,7 +30,7 @@ const Game = () => {
     if (!puzzle) {
       dispatch(newLevel());
     }
-  }, [dispatch, puzzle])
+  }, [dispatch, puzzle]);
 
   return (
     <div className="game">
@@ -42,6 +42,6 @@ const Game = () => {
       </>}
     </div>
   );
-}
+};
 
 export default Game;
