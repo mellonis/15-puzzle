@@ -18,7 +18,12 @@
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "rules": {
+      "semi": "error",
+      "no-unused-vars": "error",
+      "prefer-const": "error"
+    }
   },
   "browserslist": [
     ">0.2%",
