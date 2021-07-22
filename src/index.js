@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import store from './utils/store';
-import Game from './components/Game'
+import store from './services/store';
+import Game from './components/game/Game'
 import * as serviceWorker from './serviceWorker';
 
 import './index.scss';
