@@ -53,7 +53,7 @@ export default class Patn {
   }
 
   get canUndo() {
-    return this.movesCount > 0;
+    return !this.isSolved && this.movesCount > 0;
   }
 
   get emptyIx() {
@@ -90,7 +90,7 @@ export default class Patn {
   }
 
   checkIfItPossibleMove(ix) {
-    return this.#possibleMoves[ix].findIndex(order => order === this.emptyIx) >= 0;
+    return !this.isSolved && this.#possibleMoves[ix].findIndex(order => order === this.emptyIx) >= 0;
   };
 
   generate(isFirstRun = true) {
@@ -143,7 +143,7 @@ export default class Patn {
     }
 
     if (this.checkIfItPossibleMove(ix)) {
-      this.simpleMove(ix);
+      this.#simpleMove(ix);
       return;
     }
 
@@ -215,7 +215,7 @@ export default class Patn {
     this.move(this.emptyIx % 4 + 12);
   }
 
-  simpleMove(ix, isUndo = false) {
+  #simpleMove = (ix, isUndo = false) => {
     const emptyIx = this.emptyIx;
 
     this.#tileList[emptyIx] = this.#tileList[ix];
@@ -230,9 +230,7 @@ export default class Patn {
 
   undo() {
     if (this.canUndo) {
-      const ix = this.#movementList.pop();
-
-      this.simpleMove(ix, true);
+      this.#simpleMove(this.#movementList.pop(), true);
       this.#movementList = Array.from(this.#movementList);
     }
   }

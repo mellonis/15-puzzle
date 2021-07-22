@@ -79,7 +79,7 @@ const Board = () => {
                     <div className="board__info">
                       <div className="title">{movieTitle}</div>
                       <div className="director">{movieDirector}</div>
-                      { movieRussianTitle && <div className="title_ru">movieRussianTitle</div> }
+                      { movieRussianTitle && <div className="title_ru">{movieRussianTitle}</div> }
                     </div>
                   </Fragment>
                   :
