@@ -199,6 +199,22 @@ export default class Patn {
     }
   }
 
+  moveDown() {
+    this.move(this.emptyIx % 4);
+  }
+
+  moveLeft() {
+    this.move(Math.floor(this.emptyIx / 4) * 4 + 3);
+  }
+
+  moveRight() {
+    this.move(Math.floor(this.emptyIx / 4) * 4);
+  }
+
+  moveUp() {
+    this.move(this.emptyIx % 4 + 12);
+  }
+
   simpleMove(ix, isUndo = false) {
     const emptyIx = this.emptyIx;
 
