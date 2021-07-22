@@ -17,7 +17,7 @@ const ControlPanel = () => {
         isSolved,
         level,
         movesCount,
-      }
+      } = {}
     },
   }) => ({
     canUndo,
