@@ -1,6 +1,6 @@
-import React, { Fragment, useCallback } from 'react';
+import React, { Fragment, useCallback, useEffect } from 'react';
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { move } from "../../services/reducers";
+import { move, moveDown, moveLeft, moveRight, moveUp } from "../../services/reducers";
 
 import './Board.scss';
 
@@ -26,6 +26,29 @@ const Board = () => {
     tileList,
   }), shallowEqual);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const onKeyDownHandler = ({key}) => {
+      switch (key) {
+        case 'ArrowDown':
+          return dispatch(moveDown());
+        case 'ArrowLeft':
+          return dispatch(moveLeft());
+        case 'ArrowRight':
+          return dispatch(moveRight());
+        case 'ArrowUp':
+          return dispatch(moveUp());
+        // no default
+      }
+    };
+
+    window.addEventListener('keydown', onKeyDownHandler,  { passive: true });
+
+    return () => {
+      window.removeEventListener('keydown', onKeyDownHandler);
+    };
+  }, [dispatch]);
+
   const onMoveClickHandler = useCallback((event) => {
     const ix = Number(event.target.dataset.ix);
 
@@ -68,6 +91,6 @@ const Board = () => {
       }
     </div>
   );
-}
+};
 
 export default Board;

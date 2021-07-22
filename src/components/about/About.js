@@ -8,7 +8,7 @@ const About = () => {
   const dispatch = useDispatch();
   const onHideClick = useCallback(() => {
     dispatch(hideAbout());
-  }, [dispatch])
+  }, [dispatch]);
 
   return (
     <div className="about" onClick={onHideClick}>
@@ -17,6 +17,6 @@ const About = () => {
       </div>
     </div>
   );
-}
+};
 
 export default About;

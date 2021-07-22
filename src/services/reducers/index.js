@@ -44,6 +44,38 @@ export const appSlice = createSlice({
 
       state.puzzle = mapPuzzleToPlainObject(puzzle);
     },
+    moveDown(state) {
+      if (!puzzle) {
+        return;
+      }
+
+      puzzle.moveDown();
+      state.puzzle = mapPuzzleToPlainObject(puzzle);
+    },
+    moveLeft(state) {
+      if (!puzzle) {
+        return;
+      }
+
+      puzzle.moveLeft();
+      state.puzzle = mapPuzzleToPlainObject(puzzle);
+    },
+    moveRight(state) {
+      if (!puzzle) {
+        return;
+      }
+
+      puzzle.moveRight();
+      state.puzzle = mapPuzzleToPlainObject(puzzle);
+    },
+    moveUp(state) {
+      if (!puzzle) {
+        return;
+      }
+
+      puzzle.moveUp();
+      state.puzzle = mapPuzzleToPlainObject(puzzle);
+    },
     newLevel(state) {
       const lastSolvedLevel = Number(localStorage.getItem('lastSolvedLevel'));
 
@@ -79,6 +111,10 @@ export const {
   hideAbout,
   hideHelp,
   move,
+  moveDown,
+  moveLeft,
+  moveRight,
+  moveUp,
   newLevel,
   restart,
   showAbout,
