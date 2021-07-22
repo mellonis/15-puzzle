@@ -6,7 +6,7 @@ const initialState = {
   isAboutShown: false,
   isHelpShown: false,
   levelList,
-  puzzle: null,
+  puzzle: undefined,
 };
 
 let puzzle = null;

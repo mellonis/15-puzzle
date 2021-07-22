@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { newLevel } from "../../services/reducers";
 import About from '../about/About';
@@ -26,20 +26,16 @@ const Game = () => {
   }), shallowEqual);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (!puzzle) {
-      dispatch(newLevel());
-    }
-  }, [dispatch, puzzle]);
+  const onNewGameClickHandler = useCallback(() => {
+    dispatch(newLevel());
+  }, [dispatch]);
 
   return (
-    <div className="game">
-      { puzzle && <>
-        <Board/>
-        <ControlPanel/>
-        { isHelpShown && <Help/> }
-        { isAboutShown && <About/> }
-      </>}
+    <div className="game" onClick={!puzzle && onNewGameClickHandler}>
+      { puzzle && <Board/> }
+      <ControlPanel/>
+      { isHelpShown && <Help/> }
+      { (!puzzle || isAboutShown) && <About/> }
     </div>
   );
 };

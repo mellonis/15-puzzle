@@ -1,5 +1,6 @@
 import React, { Fragment, useCallback, useEffect } from 'react';
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import cs from 'classnames';
 import { move, moveDown, moveLeft, moveRight, moveUp } from "../../services/reducers";
 
 import './Board.scss';
@@ -56,7 +57,9 @@ const Board = () => {
   }, [dispatch]);
 
   return (
-    <div className={'board' + (isSolved ? ' board_done' : '')} data-level={level}>
+    <div className={cs('board', {
+      'board_done': isSolved
+    })} data-level={level}>
       {
         tileList
           ?
