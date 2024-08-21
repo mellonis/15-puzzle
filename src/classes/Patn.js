@@ -1,4 +1,4 @@
-export default class Patn {
+export class Patn {
   static #size = {
     height: 4,
     width: 4,
