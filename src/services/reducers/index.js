@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import Path from '../../classes/Patn';
+import {Patn} from '../../classes/Patn';
 import levelList from '../../levels.json';
 
 const initialState = {
@@ -79,7 +79,7 @@ export const appSlice = createSlice({
     newLevel(state) {
       const lastSolvedLevel = Number(localStorage.getItem('lastSolvedLevel'));
 
-      puzzle = new Path(levelList.length, lastSolvedLevel);
+      puzzle = new Patn(levelList.length, lastSolvedLevel);
       state.puzzle = mapPuzzleToPlainObject(puzzle);
     },
     restart(state) {
