@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect} from 'react';
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { restart, showAbout, showHelp, undo } from '../../services/reducers';
+import {shallowEqual, useDispatch, useSelector} from 'react-redux';
+import {restart, showAbout, showHelp, undo} from '../../services/reducers';
 import './ControlPanel.scss';
 
 const ControlPanel = () => {
@@ -10,15 +10,15 @@ const ControlPanel = () => {
     level,
     movesCount,
   } = useSelector(({
-    main: {
-      puzzle: {
-        canUndo,
-        isSolved,
-        level,
-        movesCount,
-      } = {}
-    },
-  }) => ({
+                     main: {
+                       puzzle: {
+                         canUndo,
+                         isSolved,
+                         level,
+                         movesCount,
+                       } = {}
+                     },
+                   }) => ({
     canUndo,
     isSolved,
     level,
@@ -49,6 +49,7 @@ const ControlPanel = () => {
           return onRestartClick();
         case 85:
           return onUndoClick();
+        // no default
       }
     };
 
@@ -63,9 +64,10 @@ const ControlPanel = () => {
     <div className="control-panel">
       <div className="control-panel__level">Level: {level}</div>
       <div className="control-panel__moves-count">
-        { movesCount > 0 && `Steps: ${movesCount}` }
+        {movesCount > 0 && `Steps: ${movesCount}`}
       </div>
-      { !isSolved && canUndo && <button title="Undo" className="control-panel__button control-panel__button_undo" onClick={onUndoClick}>←</button> }
+      {!isSolved && canUndo && <button title="Undo" className="control-panel__button control-panel__button_undo"
+                                       onClick={onUndoClick}>←</button>}
       <button title="New game" className="control-panel__button" onClick={onRestartClick}>⟳</button>
       <button title="Help" className="control-panel__button" onClick={onShowHelpClick}>?</button>
       <button title="About" className="control-panel__button" onClick={onShowAboutClick}>i</button>
