@@ -1,0 +1,30 @@
+{
+  "files": {
+    "main.css": "/15-puzzle/static/css/main.12baf68d.css",
+    "main.js": "/15-puzzle/static/js/main.9d77c1af.js",
+    "static/media/015.webp": "/15-puzzle/static/media/015.a6d291147e4a4d73012b.webp",
+    "static/media/014.webp": "/15-puzzle/static/media/014.66aaf001429cca7d69fe.webp",
+    "static/media/013.webp": "/15-puzzle/static/media/013.5c49d33abac1d860da17.webp",
+    "static/media/003.webp": "/15-puzzle/static/media/003.4b12391d37526e9fe905.webp",
+    "static/media/grunge_wall.webp": "/15-puzzle/static/media/grunge_wall.0d5b4c98cfa659bac0a5.webp",
+    "static/media/009.webp": "/15-puzzle/static/media/009.ff4e0072f10e95182fa6.webp",
+    "static/media/010.webp": "/15-puzzle/static/media/010.a2dcb1e613e63d60539b.webp",
+    "static/media/005.webp": "/15-puzzle/static/media/005.ac505da55758f6bbea89.webp",
+    "static/media/012.webp": "/15-puzzle/static/media/012.55c817de423d53ca1abb.webp",
+    "static/media/008.webp": "/15-puzzle/static/media/008.0d9b8635359156a8bc95.webp",
+    "static/media/007.webp": "/15-puzzle/static/media/007.c80144e49842b05a2049.webp",
+    "static/media/002.webp": "/15-puzzle/static/media/002.5c2ebb1746a66c2a1c0a.webp",
+    "static/media/001.webp": "/15-puzzle/static/media/001.c7da5cb5515207cbe38b.webp",
+    "static/media/006.webp": "/15-puzzle/static/media/006.2a4748637a34cd63291a.webp",
+    "static/media/004.webp": "/15-puzzle/static/media/004.f3db3313fe3adbdbc36a.webp",
+    "static/media/011.webp": "/15-puzzle/static/media/011.ade80f50f637d1eded93.webp",
+    "static/media/xv.webp": "/15-puzzle/static/media/xv.6d03434d3e0580b66f00.webp",
+    "index.html": "/15-puzzle/index.html",
+    "main.12baf68d.css.map": "/15-puzzle/static/css/main.12baf68d.css.map",
+    "main.9d77c1af.js.map": "/15-puzzle/static/js/main.9d77c1af.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.12baf68d.css",
+    "static/js/main.9d77c1af.js"
+  ]
+}
