@@ -58,7 +58,7 @@ const ControlPanel = () => {
     return () => {
       window.removeEventListener('keydown', onKeyDownHandler);
     };
-  }, [dispatch, isSolved]);
+  }, [dispatch, isSolved, onRestartClick, onShowAboutClick, onShowHelpClick, onUndoClick]);
 
   return (
     <div className="control-panel">
