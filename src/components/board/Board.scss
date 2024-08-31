@@ -1,7 +1,7 @@
 .board {
   $selector: &;
 
-  background-image: url('/assests/img/xv.png');
+  background-image: url('/assests/img/xv.webp');
   border-radius: var(--board-radius);
   box-shadow: #333 2px 2px 5px;
   display: grid;
@@ -112,13 +112,13 @@
     &[data-level="#{$i}"] {
       #{$selector}__tile:before {
         @if ($i < 10) {
-          background-image: url('/assests/img/puzzles/00#{$i}.png');
+          background-image: url('/assests/img/puzzles/00#{$i}.webp');
         }
         @else if($i < 100) {
-          background-image: url('/assests/img/puzzles/0#{$i}.png');
+          background-image: url('/assests/img/puzzles/0#{$i}.webp');
         }
         @else if($i < 1000) {
-          background-image: url('/assests/img/puzzles/#{$i}.png');
+          background-image: url('/assests/img/puzzles/#{$i}.webp');
         }
       }
     }
