@@ -31,7 +31,7 @@ const Game = () => {
   }, [dispatch]);
 
   return (
-    <div className="game" onClick={!puzzle && onNewGameClickHandler}>
+    <div className="game" onClick={!puzzle ? onNewGameClickHandler : undefined}>
       { puzzle && <Board/> }
       <ControlPanel/>
       { isHelpShown && <Help/> }
