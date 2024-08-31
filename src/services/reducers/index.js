@@ -44,36 +44,36 @@ export const appSlice = createSlice({
 
       state.puzzle = mapPuzzleToPlainObject(puzzle);
     },
-    moveDown(state) {
+    moveDown(state, {payload: isGroupMove}) {
       if (!puzzle) {
         return;
       }
 
-      puzzle.moveDown();
+      puzzle.moveDown(isGroupMove);
       state.puzzle = mapPuzzleToPlainObject(puzzle);
     },
-    moveLeft(state) {
+    moveLeft(state, {payload: isGroupMove}) {
       if (!puzzle) {
         return;
       }
 
-      puzzle.moveLeft();
+      puzzle.moveLeft(isGroupMove);
       state.puzzle = mapPuzzleToPlainObject(puzzle);
     },
-    moveRight(state) {
+    moveRight(state, {payload: isGroupMove}) {
       if (!puzzle) {
         return;
       }
 
-      puzzle.moveRight();
+      puzzle.moveRight(isGroupMove);
       state.puzzle = mapPuzzleToPlainObject(puzzle);
     },
-    moveUp(state) {
+    moveUp(state, {payload: isGroupMove}) {
       if (!puzzle) {
         return;
       }
 
-      puzzle.moveUp();
+      puzzle.moveUp(isGroupMove);
       state.puzzle = mapPuzzleToPlainObject(puzzle);
     },
     newLevel(state) {
