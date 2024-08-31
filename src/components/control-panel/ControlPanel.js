@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { restart, showAbout, showHelp, undo } from "../../services/reducers";
-
+import { restart, showAbout, showHelp, undo } from '../../services/reducers';
 import './ControlPanel.scss';
 
 const ControlPanel = () => {
