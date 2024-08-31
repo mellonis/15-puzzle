@@ -44,10 +44,10 @@ const ControlPanel = () => {
       <div className="control-panel__moves-count">
         { movesCount > 0 && `Steps: ${movesCount}` }
       </div>
-      { !isSolved && canUndo && <div className="control-panel__undo" onClick={onUndoClick}>←</div> }
-      <div className="control-panel__restart" onClick={onRestartClick}>⟳</div>
-      <div className="control-panel__help" onClick={onShowHelpClick}>?</div>
-      <div className="control-panel__about" onClick={onShowAboutClick}>i</div>
+      { !isSolved && canUndo && <button title="Undo" className="control-panel__button control-panel__button_undo" onClick={onUndoClick}>←</button> }
+      <button title="New game" className="control-panel__button" onClick={onRestartClick}>⟳</button>
+      <button title="Help" className="control-panel__button" onClick={onShowHelpClick}>?</button>
+      <button title="About" className="control-panel__button" onClick={onShowAboutClick}>i</button>
     </div>
   );
 };
