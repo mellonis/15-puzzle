@@ -23,16 +23,16 @@ const Board = () => {
       return;
     }
 
-    const onKeyDownHandler = ({key}) => {
+    const onKeyDownHandler = ({altKey: isGroupMove, key}) => {
       switch (key) {
         case 'ArrowDown':
-          return dispatch(moveDown());
+          return dispatch(moveDown(isGroupMove));
         case 'ArrowLeft':
-          return dispatch(moveLeft());
+          return dispatch(moveLeft(isGroupMove));
         case 'ArrowRight':
-          return dispatch(moveRight());
+          return dispatch(moveRight(isGroupMove));
         case 'ArrowUp':
-          return dispatch(moveUp());
+          return dispatch(moveUp(isGroupMove));
         // no default
       }
     };
