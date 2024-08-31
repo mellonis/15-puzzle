@@ -226,7 +226,7 @@ export class Patn {
     if (isUndo === false) {
       this.#movementList = this.#movementList.concat(emptyIx);
     }
-  }
+  };
 
   undo() {
     if (this.canUndo) {
