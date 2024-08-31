@@ -1,7 +1,7 @@
-import React, { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
-import { hideAbout } from "../../services/reducers";
-
+import React, {useCallback} from 'react';
+import {useDispatch} from 'react-redux';
+import {hideAbout} from '../../services/reducers';
+import {useCallbackOnEscapeKeyDown} from '../../hooks/useCallbackOnEscapeKeyDown';
 import './About.scss';
 
 const About = () => {
@@ -9,6 +9,8 @@ const About = () => {
   const onHideClick = useCallback(() => {
     dispatch(hideAbout());
   }, [dispatch]);
+
+  useCallbackOnEscapeKeyDown(onHideClick);
 
   return (
     <div className="about" onClick={onHideClick}>
