@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, {useCallback, useEffect} from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { restart, showAbout, showHelp, undo } from '../../services/reducers';
 import './ControlPanel.scss';
@@ -37,6 +37,27 @@ const ControlPanel = () => {
   const onUndoClick = useCallback(() => {
     dispatch(undo());
   }, [dispatch]);
+
+  useEffect(() => {
+    const onKeyDownHandler = ({altKey: isGroupMove, key, keyCode}) => {
+      switch (keyCode) {
+        case 72:
+          return onShowHelpClick();
+        case 73:
+          return onShowAboutClick();
+        case 82:
+          return onRestartClick();
+        case 85:
+          return onUndoClick();
+      }
+    };
+
+    window.addEventListener('keydown', onKeyDownHandler, {passive: true});
+
+    return () => {
+      window.removeEventListener('keydown', onKeyDownHandler);
+    };
+  }, [dispatch, isSolved]);
 
   return (
     <div className="control-panel">
