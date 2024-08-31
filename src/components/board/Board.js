@@ -61,7 +61,7 @@ const Board = () => {
       {tileList ? <>
         {tileList.map((order, ix) => isSolved || order < tileList.length ?
           <div key={order} data-ix={ix} className={'board__tile board__tile_' + order}
-               onClick={onMoveClickHandler}/> : <div key={order} className="board__empty"/>)}
+               onClick={!isSolved ? onMoveClickHandler : undefined}/> : <div key={order} className="board__empty"/>)}
         {isSolved && (<div className="board__info">
           <div className="title">{movieTitle}</div>
           <div className="director">{movieDirector}</div>
