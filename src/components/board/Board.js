@@ -1,8 +1,7 @@
 import React, {Fragment, useCallback, useEffect} from 'react';
-import {shallowEqual, useDispatch, useSelector} from "react-redux";
+import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 import cs from 'classnames';
-import {move, moveDown, moveLeft, moveRight, moveUp} from "../../services/reducers";
-
+import {move, moveDown, moveLeft, moveRight, moveUp} from '../../services/reducers';
 import './Board.scss';
 
 const Board = () => {
