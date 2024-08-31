@@ -134,7 +134,7 @@ export class Patn {
     }
   }
 
-  move(ix) {
+  move(ix, isGroupMove) {
     const emptyIx = this.emptyIx;
 
     if (Array.isArray(ix)) {
@@ -169,6 +169,10 @@ export class Patn {
         }
       }
 
+      if (!isGroupMove) {
+        movementList.splice(1, movementList.length);
+      }
+
       this.move(movementList);
       return;
     }
@@ -195,24 +199,28 @@ export class Patn {
         }
       }
 
+      if (!isGroupMove) {
+        movementList.splice(1, movementList.length);
+      }
+
       this.move(movementList);
     }
   }
 
-  moveDown() {
-    this.move(this.emptyIx % 4);
+  moveDown(isGroupMove) {
+    this.move(this.emptyIx % 4, isGroupMove);
   }
 
-  moveLeft() {
-    this.move(Math.floor(this.emptyIx / 4) * 4 + 3);
+  moveLeft(isGroupMove) {
+    this.move(Math.floor(this.emptyIx / 4) * 4 + 3, isGroupMove);
   }
 
-  moveRight() {
-    this.move(Math.floor(this.emptyIx / 4) * 4);
+  moveRight(isGroupMove) {
+    this.move(Math.floor(this.emptyIx / 4) * 4, isGroupMove);
   }
 
-  moveUp() {
-    this.move(this.emptyIx % 4 + 12);
+  moveUp(isGroupMove) {
+    this.move(this.emptyIx % 4 + 12, isGroupMove);
   }
 
   #simpleMove = (ix, isUndo = false) => {
