@@ -28,9 +28,10 @@
     &_undo {
       font-family: sans-serif;
     }
-
-    &:hover {
-      text-shadow: black 1px 1px 2px;
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        text-shadow: black 1px 1px 2px;
+      }
     }
 
     &:active {

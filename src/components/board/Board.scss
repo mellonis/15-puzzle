@@ -22,10 +22,12 @@
       box-shadow: #000 2px 2px 2px;
       cursor: pointer;
 
-      &:hover {
-        box-shadow: #000 8px 8px 10px;
-        left: -4px;
-        top: -4px;
+      @media (hover: hover) and (pointer: fine) {
+        &:hover {
+          box-shadow: #000 8px 8px 10px;
+          left: -4px;
+          top: -4px;
+        }
       }
 
       @for $i from 0 through 14 {
