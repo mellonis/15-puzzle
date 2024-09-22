@@ -36,7 +36,7 @@ export const appSlice = createSlice({
         return;
       }
 
-      puzzle.move(ix);
+      puzzle.move(ix, true);
 
       if (puzzle.isSolved) {
         localStorage.setItem('lastSolvedLevel', puzzle.level);
