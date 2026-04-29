@@ -6,11 +6,10 @@ Repo layout:
 /
   static/         # the static SPA (the game UI)
   genuine/        # the signing server (real key lives here)
-  vps-scripts/    # deploy helpers rsynced to the VPS by CI
-  vps-nginx/      # nginx config for 15-puzzle.mellonis.ru (manual deploy)
-  vps-certbot/    # snapshot of /etc/letsencrypt/renewal/15-puzzle.mellonis.ru.conf
   .github/        # CD workflow
 ```
+
+VPS host config (nginx site, certbot renewal snapshot, per-container wrapper, deploy conventions) lives in `mellonis/vps`, not here.
 
 ## static
 
@@ -52,13 +51,13 @@ Endpoints (responses are plain text hex; requests are JSON):
 
 ## Deployment (`.github/workflows/main.yml`)
 
-VPS conventions, deploy pattern, container/port table, env file map, and CI/CD shape are documented in the workspace `CLAUDE.md` one directory up. The notes below are the 15-puzzle-specific bits.
+VPS conventions, deploy pattern, container/port table, env file map, and CI/CD shape are documented in `mellonis/vps`. The notes below are the 15-puzzle-specific bits.
 
 Three jobs run on push to `master`:
 
 1. **`gh-pages`** — builds `static` with `--base=/15-puzzle/` and publishes `static/dist/` to the `gh-pages` branch via `peaceiris/actions-gh-pages@v4`. Lands at `https://<owner>.github.io/15-puzzle/`.
 2. **`vps-static`** — rebuilds `static` with the default base (`/`) and rsyncs `static/dist/` to `/var/web-apps/15-puzzle/static/` on the VPS.
-3. **`vps-genuine`** — lints + tests `genuine`, builds a Docker image, pushes to `ghcr.io/<owner>/<repo>-genuine:{latest,sha}`, and SSHes to invoke `/var/web-apps/run.sh 15-puzzle-genuine`. The per-container wrapper at `/var/web-apps/15-puzzle/genuine/run.sh` (canonical source: `vps-scripts/genuine/run.sh`) is for ad-hoc manual restart only — not shipped by CI.
+3. **`vps-genuine`** — lints + tests `genuine`, builds a Docker image, pushes to `ghcr.io/<owner>/<repo>-genuine:{latest,sha}`, and SSHes to invoke `/var/web-apps/run.sh 15-puzzle-genuine`. The per-container wrapper at `/var/web-apps/15-puzzle/genuine/run.sh` is for ad-hoc manual restart only — not shipped by CI; canonical source is `mellonis/vps` at `containers/15-puzzle/genuine/run.sh`.
 
 ### Repo-specific secrets (beyond the workspace baseline)
 
@@ -104,5 +103,5 @@ The private key never reaches the browser; the bundle embeds only the public key
 ### One-time VPS setup (15-puzzle only)
 
 1. Place `private.pem` at `/var/web-apps/15-puzzle/genuine/private.pem` (`chmod 600`) — see "Where keys are stored" above.
-2. Copy `vps-nginx/15-puzzle.mellonis.ru` to `/etc/nginx/sites-available/`, symlink into `sites-enabled/`, then `nginx -t && systemctl reload nginx`. Static files plus `/seed` and `/sign` proxied to `127.0.0.1:20005`.
+2. Copy `mellonis/vps` at `nginx/sites/15-puzzle.mellonis.ru` to `/etc/nginx/sites-available/`, symlink into `sites-enabled/`, then `nginx -t && systemctl reload nginx`. Static files plus `/seed` and `/sign` proxied to `127.0.0.1:20005`.
 3. If the image is private, `docker login ghcr.io` on the VPS with a PAT scoped `read:packages`.
