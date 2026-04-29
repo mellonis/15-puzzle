@@ -153,16 +153,35 @@ async function startNewLevel() {
   render();
 }
 
+let metadataToken = 0;
+
+function preloadImage(url) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = img.onerror = () => resolve();
+    img.src = url;
+  });
+}
+
 async function refreshMetadata() {
   if (!puzzle) return;
+  const token = ++metadataToken;
   const userSeed = userSeedOf(progress);
   const meta = await getLevelMetadata(currentLevel, userSeed, lastSolvedLevelOf(progress), chainHashOf(progress));
-  if (meta && await verifyLevelMetadata(meta)) {
-    levelMetadata = meta;
-    setChainHash(progress, meta.chainHash);
-  } else {
+  if (token !== metadataToken) return;
+  if (!meta || !(await verifyLevelMetadata(meta))) {
+    if (token !== metadataToken) return;
     levelMetadata = null;
+    return;
   }
+  if (token !== metadataToken) return;
+  setChainHash(progress, meta.chainHash);
+  // Hold the old image visible until the new one is in the browser cache,
+  // otherwise tiles render against an empty background during the swap.
+  await preloadImage(meta.imageUrl);
+  if (token !== metadataToken) return;
+  levelMetadata = meta;
+  render();
 }
 
 async function captureIfSolved() {
