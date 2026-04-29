@@ -2,26 +2,123 @@ name: CD
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   workflow_dispatch:
+
+env:
+  NODE_VERSION: 24
+  CLIENT_DIR: static
+  SERVER_DIR: genuine
+  CONTAINER_NAME: 15-puzzle-genuine
+  GENUINE_IMAGE: ghcr.io/${{ github.repository }}-genuine
+  VPS_STATIC_PATH: /var/web-apps/15-puzzle.mellonis.ru
+  VPS_SCRIPTS_PATH: /var/web-apps/15-puzzle-vps-scripts
+
 jobs:
-  build:
+  # 1) GH Pages: client built with /15-puzzle/ base.
+  gh-pages:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x]
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
-      - name: Build
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Build (gh-pages base)
+        working-directory: ${{ env.CLIENT_DIR }}
+        env:
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          VITE_PUBLIC_KEY: ${{ secrets.VITE_PUBLIC_KEY }}
         run: |
           npm ci
-          PUBLIC_URL=/15-puzzle/ npm run build
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+          npm run build -- --base=/15-puzzle/
+      - name: Deploy to GH Pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build
+          publish_dir: ./${{ env.CLIENT_DIR }}/dist
+
+  # 2) Static deploy to 15-puzzle.mellonis.ru via rsync.
+  vps-static:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Build (mellonis.ru base)
+        working-directory: ${{ env.CLIENT_DIR }}
+        env:
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          VITE_PUBLIC_KEY: ${{ secrets.VITE_PUBLIC_KEY }}
+        run: |
+          npm ci
+          npm run build
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.10.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_KEY }}
+      - name: Sync to VPS
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+        run: |
+          rsync -avz --delete \
+            -e "ssh -o StrictHostKeyChecking=no" \
+            ./${{ env.CLIENT_DIR }}/dist/ \
+            "$SSH_USER@$SSH_HOST:${{ env.VPS_STATIC_PATH }}/"
+
+  # 3) Build + push the genuine signing server image, redeploy container on VPS.
+  vps-genuine:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Lint + test
+        working-directory: ${{ env.SERVER_DIR }}
+        run: |
+          npm ci
+          npm run lint
+          npm test
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./${{ env.SERVER_DIR }}
+          push: true
+          platforms: linux/amd64
+          tags: |
+            ${{ env.GENUINE_IMAGE }}:latest
+            ${{ env.GENUINE_IMAGE }}:${{ github.sha }}
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.10.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_KEY }}
+      - name: Sync vps-scripts to VPS
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+        run: |
+          rsync -avz \
+            -e "ssh -o StrictHostKeyChecking=no" \
+            ./vps-scripts/ \
+            "$SSH_USER@$SSH_HOST:${{ env.VPS_SCRIPTS_PATH }}/"
+      - name: Redeploy container on VPS
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          IMAGE: ${{ env.GENUINE_IMAGE }}:${{ github.sha }}
+        run: |
+          ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" \
+            "IMAGE=$IMAGE bash ${{ env.VPS_SCRIPTS_PATH }}/run.sh ${{ env.CONTAINER_NAME }}"

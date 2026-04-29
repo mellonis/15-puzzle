@@ -1,0 +1,142 @@
+.board {
+  background-image: url('../assets/xv.webp');
+  border-radius: var(--board-radius);
+  box-shadow: #333 2px 2px 5px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  height: var(--board-size);
+  margin: 0 auto;
+  padding: var(--tile-gap);
+  position: relative;
+  width: var(--board-size);
+}
+
+.board:not(.board_done) {
+  grid-gap: var(--tile-gap);
+}
+
+.board:not(.board_done) .board__tile {
+  border-radius: var(--tile-border-radius);
+  border-style: solid;
+  box-shadow: #000 2px 2px 2px;
+  cursor: pointer;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .board:not(.board_done) .board__tile:hover {
+    box-shadow: #000 8px 8px 10px;
+    left: -4px;
+    top: -4px;
+  }
+}
+
+.board:not(.board_done) .board__tile_1:after  { content: "1"; }
+.board:not(.board_done) .board__tile_2:after  { content: "2"; }
+.board:not(.board_done) .board__tile_3:after  { content: "3"; }
+.board:not(.board_done) .board__tile_4:after  { content: "4"; }
+.board:not(.board_done) .board__tile_5:after  { content: "5"; }
+.board:not(.board_done) .board__tile_6:after  { content: "6"; }
+.board:not(.board_done) .board__tile_7:after  { content: "7"; }
+.board:not(.board_done) .board__tile_8:after  { content: "8"; }
+.board:not(.board_done) .board__tile_9:after  { content: "9"; }
+.board:not(.board_done) .board__tile_10:after { content: "10"; }
+.board:not(.board_done) .board__tile_11:after { content: "11"; }
+.board:not(.board_done) .board__tile_12:after { content: "12"; }
+.board:not(.board_done) .board__tile_13:after { content: "13"; }
+.board:not(.board_done) .board__tile_14:after { content: "14"; }
+.board:not(.board_done) .board__tile_15:after { content: "15"; }
+
+.board__tile {
+  border-color: var(--tile-border-color);
+  border-width: 1px;
+  overflow: hidden;
+  position: relative;
+}
+
+.board__tile:before {
+  content: ' ';
+  height: var(--board-size);
+  position: absolute;
+  width: var(--board-size);
+  background-size: 100% 100%;
+}
+
+.board__tile:after {
+  color: var(--tile-number-color);
+  left: calc(var(--board-size) / 50);
+  position: absolute;
+  text-shadow: black 2px 2px 2px;
+  top: calc(var(--board-size) / 50);
+}
+
+.board__tile_1:before  { left: 0;     top: 0; }
+.board__tile_2:before  { left: -100%; top: 0; }
+.board__tile_3:before  { left: -200%; top: 0; }
+.board__tile_4:before  { left: -300%; top: 0; }
+.board__tile_5:before  { left: 0;     top: -100%; }
+.board__tile_6:before  { left: -100%; top: -100%; }
+.board__tile_7:before  { left: -200%; top: -100%; }
+.board__tile_8:before  { left: -300%; top: -100%; }
+.board__tile_9:before  { left: 0;     top: -200%; }
+.board__tile_10:before { left: -100%; top: -200%; }
+.board__tile_11:before { left: -200%; top: -200%; }
+.board__tile_12:before { left: -300%; top: -200%; }
+.board__tile_13:before { left: 0;     top: -300%; }
+.board__tile_14:before { left: -100%; top: -300%; }
+.board__tile_15:before { left: -200%; top: -300%; }
+.board__tile_16:before { left: -300%; top: -300%; }
+
+.board__tile_1,
+.board__tile_5,
+.board__tile_9,
+.board__tile_13 {
+  border-left-color: var(--tile-border-color);
+  border-left-style: solid;
+}
+
+.board__tile_4,
+.board__tile_8,
+.board__tile_12,
+.board__tile_16 {
+  border-right-color: var(--tile-border-color);
+  border-right-style: solid;
+}
+
+.board__tile_1,
+.board__tile_2,
+.board__tile_3,
+.board__tile_4 {
+  border-top-color: var(--tile-border-color);
+  border-top-style: solid;
+}
+
+.board__tile_13,
+.board__tile_14,
+.board__tile_15,
+.board__tile_16 {
+  border-bottom-color: var(--tile-border-color);
+  border-bottom-style: solid;
+}
+
+.board__tile_1  { border-top-left-radius:     var(--tile-border-radius); }
+.board__tile_4  { border-top-right-radius:    var(--tile-border-radius); }
+.board__tile_13 { border-bottom-left-radius:  var(--tile-border-radius); }
+.board__tile_16 { border-bottom-right-radius: var(--tile-border-radius); }
+
+.board .board__tile:before { background-image: var(--puzzle-image); }
+
+.board__info {
+  background-color: rgba(0, 0, 0, 0.9);
+  border-bottom-left-radius: var(--tile-border-radius);
+  border-bottom-right-radius: var(--tile-border-radius);
+  border-color: var(--tile-border-color);
+  border-style: solid;
+  border-width: 1px;
+  bottom: var(--tile-gap);
+  color: var(--tile-number-color);
+  left: var(--tile-gap);
+  padding: var(--tile-gap);
+  position: absolute;
+  right: var(--tile-gap);
+}
