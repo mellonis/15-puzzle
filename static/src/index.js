@@ -148,9 +148,7 @@ async function startNewLevel() {
   if (puzzle) return;
   progress = await loadProgress();
   if (!progress) return; // genuine server unreachable
-  buildPuzzle(lastSolvedLevelOf(progress) + 1);
-  render();
-  await refreshMetadata();
+  await switchToLevel(lastSolvedLevelOf(progress) + 1);
 }
 
 let metadataToken = 0;
@@ -163,24 +161,23 @@ function preloadImage(url) {
   });
 }
 
-async function refreshMetadata() {
-  if (!puzzle) return;
+// Hold the old board visible until the new image is in the browser cache,
+// then swap puzzle + metadata together — otherwise the new shuffled tiles
+// briefly render against the previous level's image.
+async function switchToLevel(level) {
   const token = ++metadataToken;
   const userSeed = userSeedOf(progress);
-  const meta = await getLevelMetadata(currentLevel, userSeed, lastSolvedLevelOf(progress), chainHashOf(progress));
+  const meta = await getLevelMetadata(level, userSeed, lastSolvedLevelOf(progress), chainHashOf(progress));
   if (token !== metadataToken) return;
-  if (!meta || !(await verifyLevelMetadata(meta))) {
+  let nextMeta = null;
+  if (meta && await verifyLevelMetadata(meta)) {
+    setChainHash(progress, meta.chainHash);
+    await preloadImage(meta.imageUrl);
     if (token !== metadataToken) return;
-    levelMetadata = null;
-    return;
+    nextMeta = meta;
   }
-  if (token !== metadataToken) return;
-  setChainHash(progress, meta.chainHash);
-  // Hold the old image visible until the new one is in the browser cache,
-  // otherwise tiles render against an empty background during the swap.
-  await preloadImage(meta.imageUrl);
-  if (token !== metadataToken) return;
-  levelMetadata = meta;
+  buildPuzzle(level);
+  levelMetadata = nextMeta;
   render();
 }
 
@@ -208,12 +205,11 @@ async function onTileClick(event) {
 async function onRestart() {
   if (!puzzle) return;
   if (puzzle.isSolved) {
-    buildPuzzle(currentLevel + 1);
+    await switchToLevel(currentLevel + 1);
   } else {
     puzzle.generate();
+    render();
   }
-  render();
-  await refreshMetadata();
 }
 
 function onUndo() {

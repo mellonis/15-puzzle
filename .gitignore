@@ -19,6 +19,9 @@ static/src/services/chain-entry.js
 15-puzzle.private.pem
 15-puzzle.public.txt
 
+# mkcert leaf certs for local HTTPS dev (see static/vite.config.js)
+static/*.pem
+
 # misc
 .DS_Store
 .env
