@@ -149,8 +149,8 @@ async function startNewLevel() {
   progress = await loadProgress();
   if (!progress) return; // genuine server unreachable
   buildPuzzle(lastSolvedLevelOf(progress) + 1);
-  await refreshMetadata();
   render();
+  await refreshMetadata();
 }
 
 let metadataToken = 0;
@@ -212,8 +212,8 @@ async function onRestart() {
   } else {
     puzzle.generate();
   }
-  await refreshMetadata();
   render();
+  await refreshMetadata();
 }
 
 function onUndo() {
