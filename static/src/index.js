@@ -142,10 +142,6 @@ function buildPuzzle(level) {
   puzzle = new Patn(() => rngForLevel(level, userSeed));
   currentLevel = level;
   levelReward = null;
-  // DEBUG
-  console.log('[build]', {level, userSeed, initial: puzzle.initialTileList, tiles: puzzle.tileList});
-  window.__puzzle = puzzle;
-  window.__progress = () => progress;
 }
 
 async function startNewLevel() {
@@ -172,25 +168,7 @@ async function refreshMetadata() {
 async function captureIfSolved() {
   if (!puzzle?.isSolved || !progress) return;
   const solvedLevel = currentLevel;
-  const traj = puzzle.moveTrajectory;
-  // Sanity: replay locally to verify trajectory matches Patn's tile state.
-  const initial = puzzle.initialTileList;
-  const tiles = [...initial];
-  let badAt = -1;
-  for (let i = 1; i < traj.length; i++) {
-    const prev = traj[i - 1], next = traj[i];
-    const ar = prev >> 2, ac = prev & 3, br = next >> 2, bc = next & 3;
-    if (Math.abs(ar - br) + Math.abs(ac - bc) !== 1) { badAt = i; break; }
-    tiles[prev] = tiles[next];
-    tiles[next] = 16;
-  }
-  const replayMatches = badAt === -1 && JSON.stringify(tiles) === JSON.stringify(puzzle.tileList);
-  if (!replayMatches) {
-    console.error('[capture] trajectory does not replay to current tileList', {
-      initial, traj, badAt, replayResult: tiles, patnTiles: puzzle.tileList,
-    });
-  }
-  progress = await saveProof(progress, solvedLevel, traj);
+  progress = await saveProof(progress, solvedLevel, puzzle.moveTrajectory);
   const userSeed = userSeedOf(progress);
   const reward = await getLevelReward(solvedLevel, userSeed, chainHashOf(progress));
   if (currentLevel !== solvedLevel) return; // user advanced before reward arrived

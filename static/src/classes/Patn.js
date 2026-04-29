@@ -89,9 +89,19 @@ export class Patn {
     }
 
     this.#movementList = [];
-    this.#tileList = Array.apply(null, {length: Patn.#size.width * Patn.#size.height})
-      .map(Number.call, (i) => i + 1)
-      .sort(() => this.#rng() - 0.5);
+    // Fisher-Yates shuffle — deterministic across JS engines. .sort with a
+    // randomizing comparator calls the comparator a different number of
+    // times in V8 vs JSC (Safari) vs SpiderMonkey, so the same rng would
+    // produce different boards per browser and break replay verification.
+    const n = Patn.#size.width * Patn.#size.height;
+    const tiles = Array.from({length: n}, (_, i) => i + 1);
+    for (let i = n - 1; i > 0; i--) {
+      const j = Math.floor(this.#rng() * (i + 1));
+      const tmp = tiles[i];
+      tiles[i] = tiles[j];
+      tiles[j] = tmp;
+    }
+    this.#tileList = tiles;
 
     while (!this.canBeSolved || this.isSolved) {
       this.generate(false);
