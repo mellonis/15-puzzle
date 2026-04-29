@@ -13,8 +13,6 @@ env:
   GENUINE_IMAGE: ghcr.io/${{ github.repository }}-genuine
   VPS_STATIC_PATH: /var/web-apps/15-puzzle.mellonis.ru
   VPS_SCRIPTS_PATH: /var/web-apps/15-puzzle-vps-scripts
-  # Silence the Node 20 deprecation warning by forcing v4 actions onto Node 24.
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
 jobs:
   # 1) GH Pages: client built with /15-puzzle/ base.
@@ -23,8 +21,8 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: ${{ env.NODE_VERSION }}
       - name: Build (gh-pages base)
@@ -47,8 +45,8 @@ jobs:
   vps-static:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: ${{ env.NODE_VERSION }}
       - name: Build (mellonis.ru base)
@@ -80,8 +78,8 @@ jobs:
       contents: read
       packages: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: ${{ env.NODE_VERSION }}
       - name: Lint + test
@@ -91,13 +89,13 @@ jobs:
           npm run lint
           npm test
       - name: Log in to GHCR
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: ./${{ env.SERVER_DIR }}
           push: true
