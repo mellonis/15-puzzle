@@ -100,6 +100,7 @@ jobs:
           context: ./${{ env.SERVER_DIR }}
           push: true
           platforms: linux/amd64
+          provenance: false
           tags: |
             ${{ env.GENUINE_IMAGE }}:latest
             ${{ env.GENUINE_IMAGE }}:${{ github.sha }}
