@@ -140,7 +140,8 @@ export async function verifyProof(level, moves, userSeed, sig) {
 const blobCache = new Map();
 const ZERO_CHAIN = '00000000';
 
-const hashToUrl = (h) => `/levels/${h}.json`;
+const STATIC_BASE = (import.meta.env.BASE_URL ?? '/').replace(/\/$/, '');
+const hashToUrl = (h) => `${STATIC_BASE}/levels/${h}.json`;
 const urlToHash = (url) => {
   const m = /\/levels\/([^/.]+)\.json$/.exec(url);
   return m ? m[1] : null;
