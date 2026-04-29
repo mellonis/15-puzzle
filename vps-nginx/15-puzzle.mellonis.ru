@@ -8,7 +8,7 @@ server {
 
 	server_name 15-puzzle.mellonis.ru;
 
-	root /var/web-apps/15-puzzle.mellonis.ru;
+	root /var/web-apps/15-puzzle/static;
 	index index.html;
 
 	# Public game endpoints proxied to the genuine container (run.sh maps
@@ -24,7 +24,7 @@ server {
 	# Admin endpoints — read-only DB inspection. Basic-auth gated.
 	location ~ ^/(boards|board/[0-9]+/attempts)$ {
 		auth_basic           "Administrator's Area";
-		auth_basic_user_file /var/web-apps/15-puzzle-genuine.htpasswd;
+		auth_basic_user_file /var/web-apps/15-puzzle/genuine/.htpasswd;
 
 		proxy_pass http://127.0.0.1:20005;
 		proxy_set_header Host              $host;

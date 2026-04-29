@@ -11,8 +11,7 @@ env:
   SERVER_DIR: genuine
   CONTAINER_NAME: 15-puzzle-genuine
   GENUINE_IMAGE: ghcr.io/${{ github.repository }}-genuine
-  VPS_STATIC_PATH: /var/web-apps/15-puzzle.mellonis.ru
-  VPS_SCRIPTS_PATH: /var/web-apps/15-puzzle-vps-scripts
+  VPS_STATIC_PATH: /var/web-apps/15-puzzle/static
 
 jobs:
   # 1) GH Pages: client built with /15-puzzle/ base.
@@ -108,15 +107,6 @@ jobs:
         uses: webfactory/ssh-agent@v0.10.0
         with:
           ssh-private-key: ${{ secrets.SSH_KEY }}
-      - name: Sync vps-scripts to VPS
-        env:
-          SSH_HOST: ${{ secrets.SSH_HOST }}
-          SSH_USER: ${{ secrets.SSH_USER }}
-        run: |
-          rsync -avz \
-            -e "ssh -o StrictHostKeyChecking=no" \
-            ./vps-scripts/ \
-            "$SSH_USER@$SSH_HOST:${{ env.VPS_SCRIPTS_PATH }}/"
       - name: Redeploy container on VPS
         env:
           SSH_HOST: ${{ secrets.SSH_HOST }}
@@ -124,4 +114,4 @@ jobs:
           IMAGE: ${{ env.GENUINE_IMAGE }}:${{ github.sha }}
         run: |
           ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" \
-            "IMAGE=$IMAGE bash ${{ env.VPS_SCRIPTS_PATH }}/run.sh ${{ env.CONTAINER_NAME }}"
+            "IMAGE=$IMAGE bash /var/web-apps/run.sh ${{ env.CONTAINER_NAME }}"
