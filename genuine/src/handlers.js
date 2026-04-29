@@ -25,6 +25,6 @@ export function signHandler(body) {
   if (typeof sigUserSeed !== 'string') return reject('bad sigUserSeed type');
   if (!reSign('seed:' + userSeed, sigUserSeed)) return reject('sigUserSeed mismatch for ' + userSeed);
   const board = canonicalBoard(level, userSeed);
-  if (!replay(board, moves)) return reject(`replay failed: level=${level} userSeed=${userSeed} movesLen=${moves.length}`);
+  if (!replay(board, moves)) return reject(`replay failed: level=${level} userSeed=${userSeed} board=[${board.join(',')}] moves=[${moves.join(',')}]`);
   return sign('proof:' + level + ':' + userSeed + ':' + movesToHex(moves));
 }
