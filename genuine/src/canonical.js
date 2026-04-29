@@ -36,7 +36,15 @@ function isSolvable(tiles) {
 }
 
 function shuffleOnce(rng) {
-  return Array.from({length: 16}, (_, i) => i + 1).sort(() => rng() - 0.5);
+  // Fisher-Yates — must match static/src/classes/Patn.js generate() exactly.
+  const tiles = Array.from({length: 16}, (_, i) => i + 1);
+  for (let i = tiles.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    const tmp = tiles[i];
+    tiles[i] = tiles[j];
+    tiles[j] = tmp;
+  }
+  return tiles;
 }
 
 export function canonicalBoard(level, userSeed) {
