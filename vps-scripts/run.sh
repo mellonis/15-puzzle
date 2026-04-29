@@ -16,6 +16,7 @@ case "$SERVICE" in
     NAME="15-puzzle-genuine"
     PORT="20005:3001"
     PRIVATE_KEY_FILE="/var/web-apps/15-puzzle-genuine.pem"
+    DATA_DIR="/var/web-apps/15-puzzle-genuine-data"
     ;;
   *)
     usage
@@ -32,6 +33,10 @@ if [ ! -f "$PRIVATE_KEY_FILE" ]; then
   exit 1
 fi
 
+mkdir -p "$DATA_DIR"
+# Container runs as USER node (uid 1000 in node:alpine images).
+chown -R 1000:1000 "$DATA_DIR"
+
 if docker container inspect "$NAME" >/dev/null 2>&1; then
   docker stop "$NAME" >/dev/null
   docker rm "$NAME" >/dev/null
@@ -45,6 +50,7 @@ docker pull "$IMAGE"
 docker run -d \
   -p "127.0.0.1:$PORT" \
   -e "PRIVATE_KEY=$(cat "$PRIVATE_KEY_FILE")" \
+  -v "$DATA_DIR:/data" \
   --name "$NAME" \
   --restart unless-stopped \
   "$IMAGE"

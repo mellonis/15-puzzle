@@ -11,9 +11,21 @@ server {
 	root /var/web-apps/15-puzzle.mellonis.ru;
 	index index.html;
 
-	# Server endpoints proxied to the genuine container (run.sh maps it
-	# to 127.0.0.1:20005). Add new endpoint paths here as they appear.
+	# Public game endpoints proxied to the genuine container (run.sh maps
+	# it to 127.0.0.1:20005). Add new public endpoint paths here.
 	location ~ ^/(seed|sign)$ {
+		proxy_pass http://127.0.0.1:20005;
+		proxy_set_header Host              $host;
+		proxy_set_header X-Real-IP         $remote_addr;
+		proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+		proxy_set_header X-Forwarded-Proto https;
+	}
+
+	# Admin endpoints — read-only DB inspection. Basic-auth gated.
+	location ~ ^/(boards|board/[0-9]+/attempts)$ {
+		auth_basic           "Administrator's Area";
+		auth_basic_user_file /var/web-apps/15-puzzle-genuine.htpasswd;
+
 		proxy_pass http://127.0.0.1:20005;
 		proxy_set_header Host              $host;
 		proxy_set_header X-Real-IP         $remote_addr;
