@@ -142,6 +142,10 @@ function buildPuzzle(level) {
   puzzle = new Patn(() => rngForLevel(level, userSeed));
   currentLevel = level;
   levelReward = null;
+  // DEBUG
+  console.log('[build]', {level, userSeed, initial: puzzle.initialTileList, tiles: puzzle.tileList});
+  window.__puzzle = puzzle;
+  window.__progress = () => progress;
 }
 
 async function startNewLevel() {
