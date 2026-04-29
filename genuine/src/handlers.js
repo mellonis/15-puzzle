@@ -16,14 +16,15 @@ export function seedHandler() {
 
 // /sign → plain-text 128-hex Ed25519 signature, or null on rejection
 export function signHandler(body) {
-  if (!body || typeof body !== 'object') return null;
+  const reject = (reason) => { console.warn('[sign] reject:', reason); return null; };
+  if (!body || typeof body !== 'object') return reject('no body');
   const {level, moves, userSeed, sigUserSeed} = body;
-  if (!Number.isInteger(level) || level < 1) return null;
-  if (!Array.isArray(moves) || moves.length < 2) return null;
-  if (!Number.isInteger(userSeed)) return null;
-  if (typeof sigUserSeed !== 'string') return null;
-  if (!reSign('seed:' + userSeed, sigUserSeed)) return null;
+  if (!Number.isInteger(level) || level < 1) return reject('bad level: ' + level);
+  if (!Array.isArray(moves) || moves.length < 2) return reject('bad moves: len=' + moves?.length);
+  if (!Number.isInteger(userSeed)) return reject('bad userSeed: ' + userSeed);
+  if (typeof sigUserSeed !== 'string') return reject('bad sigUserSeed type');
+  if (!reSign('seed:' + userSeed, sigUserSeed)) return reject('sigUserSeed mismatch for ' + userSeed);
   const board = canonicalBoard(level, userSeed);
-  if (!replay(board, moves)) return null;
+  if (!replay(board, moves)) return reject(`replay failed: level=${level} userSeed=${userSeed} movesLen=${moves.length}`);
   return sign('proof:' + level + ':' + userSeed + ':' + movesToHex(moves));
 }

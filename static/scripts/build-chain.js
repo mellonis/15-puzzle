@@ -21,6 +21,13 @@ MC4CAQAwBQYDK2VwBCIEIAQRRGHXgG45dNha6gnbG3b+S0ZTZuxp/tCAU0TOj+Ys
 const privateKey = createPrivateKey(process.env.PRIVATE_KEY ?? DEV_PRIVATE_KEY);
 const sign = (msg) => nodeSign(null, Buffer.from(msg, 'utf8'), privateKey).toString('hex');
 
+// BASE_URL is the path prefix the SPA is served under (e.g. "/15-puzzle"
+// for GH Pages, "" for the mellonis.ru subdomain). We bake it into the
+// signed URLs so the browser's relative-URL resolution lands on the
+// correct host path.
+const BASE = (process.env.BASE_URL ?? '').replace(/\/$/, '');
+const url = (relativePath) => BASE + relativePath;
+
 const randomHash = () => randomBytes(8).toString('hex');
 
 const preSolveMsg = (b) => `presolve:${b.level}:${b.imageUrl}:${b.nextUrl ?? ''}:${b.rewardUrl}`;
@@ -33,11 +40,12 @@ const outDir = 'public/levels';
 if (existsSync(outDir)) rmSync(outDir, {recursive: true, force: true});
 mkdirSync(outDir, {recursive: true});
 
-const preSolveUrls = levels.map(() => `/levels/${randomHash()}.json`);
-const rewardUrls = levels.map(() => `/levels/${randomHash()}.json`);
+const preSolveUrls = levels.map(() => url(`/levels/${randomHash()}.json`));
+const rewardUrls = levels.map(() => url(`/levels/${randomHash()}.json`));
 
 const writeBlob = (url, blob) => {
-  const fileName = url.replace('/levels/', '').replace('.json', '');
+  // Strip any path prefix (e.g. /15-puzzle) and the .json suffix to get the bare hash.
+  const fileName = url.split('/').pop().replace('.json', '');
   writeFileSync(join(outDir, fileName + '.json'), JSON.stringify(blob));
 };
 
@@ -53,7 +61,7 @@ for (let i = 0; i < levels.length; i++) {
 
   const preSolve = {
     level,
-    imageUrl: `/levels/${webpName}.webp`,
+    imageUrl: url(`/levels/${webpName}.webp`),
     nextUrl: i + 1 < levels.length ? preSolveUrls[i + 1] : null,
     rewardUrl: rewardUrls[i],
   };
