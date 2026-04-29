@@ -1,6 +1,7 @@
 import {randomBytes} from 'node:crypto';
 import {sign} from './sign.js';
 import {canonicalBoard, replay} from './canonical.js';
+import {recordAttempt, listBoards, findAttemptsByBoard} from './db.js';
 
 const movesToHex = (moves) => moves.map((m) => m.toString(16)).join('');
 
@@ -26,5 +27,9 @@ export function signHandler(body) {
   if (!reSign('seed:' + userSeed, sigUserSeed)) return reject('sigUserSeed mismatch for ' + userSeed);
   const board = canonicalBoard(level, userSeed);
   if (!replay(board, moves)) return reject(`replay failed: level=${level} userSeed=${userSeed} movesLen=${moves.length}`);
+  recordAttempt(board, moves);
   return sign('proof:' + level + ':' + userSeed + ':' + movesToHex(moves));
 }
+
+export const boardsHandler = () => listBoards();
+export const attemptsHandler = (boardId) => findAttemptsByBoard(boardId);

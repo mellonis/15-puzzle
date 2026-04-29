@@ -1,5 +1,5 @@
 import {createServer} from 'node:http';
-import {seedHandler, signHandler} from './handlers.js';
+import {seedHandler, signHandler, boardsHandler, attemptsHandler} from './handlers.js';
 
 const PORT = Number(process.env.PORT) || 3001;
 
@@ -18,24 +18,44 @@ function readJsonBody(req) {
   });
 }
 
-const ROUTES = {
-  'POST /seed': () => seedHandler(),
-  'POST /sign': (body) => signHandler(body),
-};
+const ATTEMPTS_PATH = /^\/board\/(\d+)\/attempts$/;
 
 async function handle(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') {
     res.writeHead(204);
     res.end();
     return;
   }
-  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
 
-  const route = `${req.method} ${req.url}`;
-  const handler = ROUTES[route];
+  const url = new URL(req.url, 'http://x');
+  const path = url.pathname;
+
+  if (req.method === 'GET') {
+    if (path === '/boards') {
+      res.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'});
+      res.end(JSON.stringify(boardsHandler()));
+      return;
+    }
+    const m = path.match(ATTEMPTS_PATH);
+    if (m) {
+      res.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'});
+      res.end(JSON.stringify(attemptsHandler(Number(m[1]))));
+      return;
+    }
+    res.writeHead(404, {'Content-Type': 'text/plain; charset=utf-8'});
+    res.end('not found');
+    return;
+  }
+
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  const ROUTES = {
+    'POST /seed': () => seedHandler(),
+    'POST /sign': (body) => signHandler(body),
+  };
+  const handler = ROUTES[`${req.method} ${path}`];
   if (!handler) {
     res.writeHead(404);
     res.end('not found');
