@@ -24,7 +24,7 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .board:not(.board_done) .board__tile:hover {
+  .board:not(.board_done) .board__cell:hover .board__tile {
     box-shadow: #000 8px 8px 10px;
     left: -4px;
     top: -4px;
@@ -50,6 +50,8 @@
 .board__tile {
   border-color: var(--tile-border-color);
   border-width: 1px;
+  box-sizing: border-box;
+  height: 100%;
   overflow: hidden;
   position: relative;
 }
