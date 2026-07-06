@@ -115,10 +115,10 @@ export class Patn {
   generateRightMoves() {
     this.#possibleMoves = [];
 
-    for (let i = 0, r = 0, c = 0; i < Patn.#size.width * Patn.#size.height; ++i) {
+    for (let i = 0; i < Patn.#size.width * Patn.#size.height; ++i) {
       this.#possibleMoves[i] = [];
-      c = i % Patn.#size.width;
-      r = (i - c) / Patn.#size.width;
+      const c = i % Patn.#size.width;
+      const r = (i - c) / Patn.#size.width;
 
       if (r > 0) {
         this.#possibleMoves[i].push((r - 1) * Patn.#size.width + c);
