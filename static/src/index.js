@@ -65,10 +65,14 @@ function renderBoard() {
       board.appendChild(el('div', {class: 'board__empty'}));
     } else {
       board.appendChild(el('div', {
-        class: `board__tile board__tile_${order}`,
-        'data-ix': ix,
-        on: !isSolved ? {click: onTileClick} : undefined,
-      }));
+          class: 'board__cell',
+          'data-ix': ix,
+        },
+        el('div', {
+          class: `board__tile board__tile_${order}`,
+          on: !isSolved ? {click: onTileClick} : undefined,
+        }),
+      ));
     }
   }
   if (isSolved && levelReward) {
@@ -196,7 +200,7 @@ async function captureIfSolved() {
 
 async function onTileClick(event) {
   if (!puzzle || puzzle.isSolved) return;
-  const ix = Number(event.currentTarget.dataset.ix);
+  const ix = Number(event.currentTarget.closest('.board__cell').dataset.ix);
   puzzle.move(ix, true);
   render();
   await captureIfSolved();
