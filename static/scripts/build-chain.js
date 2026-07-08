@@ -18,6 +18,10 @@ MC4CAQAwBQYDK2VwBCIEIAQRRGHXgG45dNha6gnbG3b+S0ZTZuxp/tCAU0TOj+Ys
 -----END PRIVATE KEY-----
 `;
 
+if (!process.env.PRIVATE_KEY && process.env.CI) {
+  throw new Error('[build-chain] PRIVATE_KEY must be set in CI; refusing to sign chain blobs with the public dev key');
+}
+
 const privateKey = createPrivateKey(process.env.PRIVATE_KEY ?? DEV_PRIVATE_KEY);
 const sign = (msg) => nodeSign(null, Buffer.from(msg, 'utf8'), privateKey).toString('hex');
 

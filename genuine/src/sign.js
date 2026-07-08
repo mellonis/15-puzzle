@@ -8,6 +8,10 @@ MC4CAQAwBQYDK2VwBCIEIAQRRGHXgG45dNha6gnbG3b+S0ZTZuxp/tCAU0TOj+Ys
 -----END PRIVATE KEY-----
 `;
 
+if (!process.env.PRIVATE_KEY && process.env.NODE_ENV === 'production') {
+  throw new Error('[genuine] PRIVATE_KEY must be set in production; refusing to start on the public dev key');
+}
+
 const privateKey = createPrivateKey(process.env.PRIVATE_KEY ?? (() => {
   console.warn('[genuine] PRIVATE_KEY not set, using DEV key');
   return DEV_PRIVATE_KEY;
